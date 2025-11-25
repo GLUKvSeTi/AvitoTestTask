@@ -26,10 +26,15 @@ func (s *service) CreatePRWithAssignments(ctx context.Context, prID, prName, aut
 	if _, err := uuid.Parse(authorID); err != nil {
 		return nil, fmt.Errorf("invalid author id: %w", err)
 	}
-	members, err := s.teamRepo.GetTeamMembersByUserID(ctx, authorID)
+	user, err := s.userRepo.GetUserByID(ctx, authorID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to find team members: %w", err)
+		return nil, err
 	}
+	team, err := s.teamRepo.GetTeamByName(ctx, *user.TeamName)
+	if err != nil {
+		return nil, err
+	}
+	members := team.Members
 	pr := &domain.PullRequest{
 		ID:       prID,
 		Name:     prName,
@@ -56,10 +61,15 @@ func (s *service) ReassignReviewer(ctx context.Context, prID, oldUserID string) 
 	if pr.Status == domain.StatusMerged {
 		return "", nil, domain.ErrPRMerged
 	}
-	members, err := s.teamRepo.GetTeamMembersByUserID(ctx, oldUserID)
+	oldUser, err := s.userRepo.GetUserByID(ctx, oldUserID)
 	if err != nil {
 		return "", nil, err
 	}
+	team, err := s.teamRepo.GetTeamByName(ctx, *oldUser.TeamName)
+	if err != nil {
+		return "", nil, err
+	}
+	members := team.Members
 	var candidate string
 	for _, member := range members {
 		if !member.IsActive || member.UserID == oldUserID {

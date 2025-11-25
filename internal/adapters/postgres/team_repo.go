@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -22,7 +23,11 @@ func (r *TeamRepo) CreateTeam(ctx context.Context, teamName string) (string, err
 	if err != nil {
 		return "", err
 	}
-	defer tx.Rollback(ctx)
+	defer func() {
+		if err := tx.Rollback(ctx); err != nil {
+			log.Printf("warning: failed to rollback transaction: %v", err)
+		}
+	}()
 	if _, err := tx.Exec(ctx, "INSERT INTO teams(team_name) VALUES($1) ON CONFLICT (team_name) DO NOTHING", teamName); err != nil {
 		return "", err
 	}
@@ -74,12 +79,15 @@ func (r *TeamRepo) DeleteTeam(ctx context.Context, teamName string) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(ctx)
+	defer func() {
+		if err := tx.Rollback(ctx); err != nil {
+			log.Printf("warning: failed to rollback transaction: %v", err)
+		}
+	}()
 	var teamID string
 	if err := tx.QueryRow(ctx, "SELECT id::text FROM teams WHERE team_name=$1", teamName).Scan(&teamID); err != nil {
 		return fmt.Errorf("team not found")
 	}
-	// unset team_id for users
 	if _, err := tx.Exec(ctx, "UPDATE users SET team_id=NULL WHERE team_id=$1::uuid", teamID); err != nil {
 		return err
 	}

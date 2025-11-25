@@ -16,7 +16,7 @@ type Repository interface {
 }
 
 type TeamRepository interface {
-	GetTeamMembersByUserID(ctx context.Context, userID string) ([]domain.TeamMember, error)
+	GetTeamByName(ctx context.Context, userID string) (*domain.Team, error)
 }
 
 type UserRepository interface {
