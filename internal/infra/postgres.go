@@ -23,7 +23,7 @@ func Migrate(ctx context.Context, pool *pgxpool.Pool) error {
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     team_name text NOT NULL UNIQUE,
     created_at timestamptz DEFAULT now()
-);`,g
+);`,
 		`CREATE TABLE IF NOT EXISTS users (
     id uuid PRIMARY KEY,
     username text NOT NULL,
