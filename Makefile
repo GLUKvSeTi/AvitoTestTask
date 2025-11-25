@@ -2,7 +2,8 @@
 
 #не рекомендованный способ
 build:
-	go build -o main ./cmd/app
+	go build -o bin/main ./cmd/app
+
 db-up:
 	docker run -d --name postgres-db \
 		-e POSTGRES_USER=postgres \
@@ -14,9 +15,8 @@ db-down:
 	docker stop postgres-db || true
 	docker rm postgres-db || true
 
-run:
-	go run ./main
-
+run: build
+	./bin/main
 #рекомендованный
 docker-compose-up:
 	docker compose up --build
