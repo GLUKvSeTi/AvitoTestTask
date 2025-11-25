@@ -44,8 +44,14 @@ cd AvitoTestTask
 # Сборка приложения
 make build
 
+# Поднятие бд в Docker
+make db-up
+
 # Запуск приложения
 make run
+
+# Остановка бд
+make db-down
 
 # Запуск через Docker Compose
 make docker-compose-up
