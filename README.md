@@ -47,9 +47,6 @@ make build
 # Запуск приложения
 make run
 
-# Сборка Docker образа
-make docker-build
-
 # Запуск через Docker Compose
 make docker-compose-up
 ```
