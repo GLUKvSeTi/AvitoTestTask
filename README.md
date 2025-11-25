@@ -25,10 +25,10 @@
 - Новые технологии (новый рутер)
 - Сделал сам себе доп работу добавив CRUD'ы
 
-## Быстрый старт
+## Быстрый старт (рекомедованный)
 ```bash
 # Клонирование репозитория
-git clone <repository-url>
+git clone https://github.com/GLUKvSeTi/AvitoTestTask.git
 cd AvitoTestTask
 
 # Запуск приложения и базы данных
@@ -37,14 +37,15 @@ docker compose up --build
 
 ## Для Linux/MacOS
 ```bash
+
+git clone https://github.com/GLUKvSeTi/AvitoTestTask.git
+cd AvitoTestTask
+
 # Сборка приложения
 make build
 
 # Запуск приложения
 make run
-
-# Запуск тестов
-make test
 
 # Сборка Docker образа
 make docker-build
@@ -54,7 +55,7 @@ make docker-compose-up
 ```
 ## Локальный запуск
 ```bash
-git clone <repository-url>
+git clone https://github.com/GLUKvSeTi/AvitoTestTask.git
 cd AvitoTestTask
 
 # Установка зависимостей

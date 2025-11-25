@@ -6,9 +6,6 @@ build:
 run:
 	go run ./cmd/app
 
-test:
-	go test ./... -v
-
 docker-build:
 	docker build -f deployments/Dockerfile -t AvitoTestTask:local .
 
